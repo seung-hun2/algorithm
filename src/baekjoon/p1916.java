@@ -1,9 +1,63 @@
 package baekjoon;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.PriorityQueue;
 import java.util.Scanner;
 
 public class p1916 {
 
+    // 다익스트라 풀이
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int N = sc.nextInt();
+        int M = sc.nextInt();
+        List<Edge>[] list = new ArrayList[N+1];
+        int[] dist = new int[N+1];
+        PriorityQueue<Info> pq = new PriorityQueue<>((o1, o2)->o1.weight - o2.weight);
+
+        for(int i=1;i<=N;i++) dist[i] = Integer.MAX_VALUE;
+        for(int i=1;i<=N;i++) list[i] = new ArrayList<>();
+        for(int i=0;i<M;i++){
+            list[sc.nextInt()].add(new Edge(sc.nextInt(), sc.nextInt()));
+        }
+        int start = sc.nextInt();
+        int end = sc.nextInt();
+
+        pq.add(new Info(start, 0));
+        dist[start] = 0;
+
+        while(!pq.isEmpty()){
+            Info x = pq.poll();
+            if(dist[x.idx] != x.weight) continue;
+            for(Edge edge : list[x.idx]){
+                if(dist[x.idx] + edge.weight >= dist[edge.to]) continue;
+
+                 dist[edge.to] = dist[x.idx] + edge.weight;
+                 pq.add(new Info(edge.to, dist[edge.to]));
+            }
+        }
+
+        System.out.println(dist[end]);
+
+    }
+
+    static class Info{
+        int idx, weight;
+        Info(int idx, int weight){
+            this.idx = idx;
+            this.weight = weight;
+        }
+    }
+
+    static class Edge{
+        int to, weight;
+        Edge(int to, int weight){
+            this.to = to;
+            this.weight = weight;
+        }
+    }
+/*
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         int N = sc.nextInt();
@@ -51,5 +105,7 @@ public class p1916 {
 
 
     }
+
+ */
 
 }
